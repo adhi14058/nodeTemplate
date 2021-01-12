@@ -1,0 +1,20 @@
+{
+    "properties": [
+        "password",
+        "username",
+        "card",
+        "secret",
+        "encryption_key",
+        "bindCredentials",
+        "bindDn",
+        "jwt_token_secret",
+        "authorization",
+        "Authorization",
+        "encryption_key",
+        "DEK",
+        "EDEK",
+        "client_id",
+        "client_secret",
+        "access_token"
+    ]
+}
