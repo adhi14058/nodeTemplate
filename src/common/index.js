@@ -11,18 +11,18 @@ const errorStatus = require('./helpers/error.status.code');
 const {errorHandler} = require('./helpers/error.handler')
 const commonRoutes = require('./routes/commonRoutes')
 const {logger} = require('./helpers/logger');
-// const rTracer = require('cls-rtracer')
+const rTracer = require('cls-rtracer')
 function initApp(config, onAfterInit){
     // mongodb.init(config);
-    var nonsslPort = normalizePort(process.env.NON_SSL_PORT || config.nonsslPort);
+    var nonsslPort = normalizePort(process.env.SERVER_PORT || config.port);
     var app = express();
     app.use(cors());
     app.use(bodyParser.urlencoded({ extended: true, limit: '100mb' }));
     app.use(bodyParser.json({ limit: '100mb' }));
     app.use(cookieParser());
-    //app.use(rTracer.expressMiddleware())
+    app.use(rTracer.expressMiddleware())
     app.use(httpContext.middleware);
-    httpContext.set('CorrelationId', uuidv4());
+    httpContext.set('CorrelationId', uuidv4()); 
     // app.use((req,res,next)=>{
     //     if(req.headers.hasOwnProperty('authorization') && req.headers['authorization'])
     //     {
@@ -54,24 +54,27 @@ function initApp(config, onAfterInit){
                 clientIP: req.headers['x-forwarded-for'],
             }
         },
-        ignoredRoutes: ["/"], // Array of paths to ignore/skip logging. Overrides global ignoredRoutes for this instance
+        // ignoredRoutes: ["/"], // Array of paths to ignore/skip logging. Overrides global ignoredRoutes for this instance
         msg: "HTTP {{req.method}} {{req.url}} ", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
-        expressFormat: false, // Use the default Express/morgan request formatting. Enabling this will override any msg if true. Will only output colors with colorize set to true
-        colorize: false, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red).
+        expressFormat: true, // Use the default Express/morgan request formatting. Enabling this will override any msg if true. Will only output colors with colorize set to true
+        colorize: true, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red).
         ignoreRoute: function (req, res) { return false; } // optional: allows to skip some log messages based on request and/or response
 
     }));
-    // app.use('/', commonRoutes.normalizedAPIs);
+    app.use('/', commonRoutes.normalizedAPIs);
 
     onAfterInit(app)
-
-    app.use(errorHandler());
+  
 
     app.use(function (req, res, next) {
         var err = new Error('API Not Found');
         err.status = 404;
-        next(err);
+        logger.error(err)
+        next(err)
     });
+
+    app.use(errorHandler());
+
     app.listen(nonsslPort,()=>{
         logger.info('running on port '+nonsslPort)
     });

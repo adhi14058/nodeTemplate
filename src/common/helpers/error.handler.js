@@ -1,6 +1,7 @@
 const {logger} = require('./logger');
 module.exports.errorHandler = ()=>{
     return function (err, req, res, next) {
+        console.log('inside error handler')
         if (!err) {
             return next();
         }
