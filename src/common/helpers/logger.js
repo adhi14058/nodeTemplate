@@ -82,7 +82,7 @@ logger = (file = "data server default.js") => {
 	let logger = createLogger({
 		level: config.logLevel,
 		format: loggerFormat(file),
-		defaultMeta: { service: "AppChemist Data Server" },
+		defaultMeta: { service: "Demo Data Server" },
 		transports: loggerTransports,
 		exitOnError: false,
 		levels: logLevels,

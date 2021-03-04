@@ -5,7 +5,7 @@ function initDb(mongo) {
 	logger.info("Establishing connection with MongoDB Atlas");
 	return mongoose
 		.connect(mongo.url, mongo.options)
-		.then(() => logger.info("Connected with AppChemist MongoDB Cluster"))
+		.then(() => logger.info("Connected with Demo MongoDB Cluster"))
 		.catch((err) => logger.error(err));
 }
 

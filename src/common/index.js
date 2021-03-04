@@ -34,7 +34,7 @@ async function initApp(config, onAfterInit) {
 			requestWhitelist: ["url", "method", "httpVersion", "originalUrl", "query"], // optional: control which properties of the request are logged
 			dynamicMeta: function (req, res) {
 				return {
-					application: "App Chemist",
+					application: "Demo",
 					protocol: req.protocol,
 					clientIP: req.headers["x-forwarded-for"],
 				};
